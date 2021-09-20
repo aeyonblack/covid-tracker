@@ -1,0 +1,36 @@
+.table {
+  margin-top: 20px;
+  overflow: scroll;
+  overflow-x: hidden;
+  height: 400px;
+  color: #555;
+}
+
+.table tr:nth-of-type(odd) {
+  background-color: #f1f1f1;
+}
+
+.table tr {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table td {
+  padding: 0.5rem;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
