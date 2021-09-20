@@ -11,11 +11,23 @@ import Map from './Map';
 import './App.css';
 
 const countries_url = 'https://disease.sh/v3/covid-19/countries';
+const world_data = 'https://disease.sh/v3/covid-19/all';
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState('worldwide');
+  const [countryInfo, setCountryInfo] = useState({});
 
+  // load worldwide data when we first load the app
+  useEffect(() => {
+    fetch(world_data)
+      .then((response) => response.json())
+      .then((data) => {
+        setCountryInfo(data);
+      });
+  });
+
+  // load all countries
   useEffect(() => {
     const getCountries = async () => {
       await fetch(countries_url)
@@ -33,10 +45,24 @@ function App() {
     getCountries();
   }, []);
 
+  // load data for current selected country
   const onCountryChange = async (e) => {
     const countryCode = e.target.value;
     setCountry(countryCode);
+
+    const url =
+      countryCode === 'worldwide'
+        ? 'https://disease.sh/v3/covid-19/all'
+        : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
+    await fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        setCountry(countryCode);
+        setCountryInfo(data);
+      });
   };
+
+  console.log('info ', countryInfo);
 
   return (
     <div className="app">
@@ -60,9 +86,21 @@ function App() {
         </div>
 
         <div className="app-stats">
-          <InfoBox title="Coronavirus Cases" cases={12000} total={300000} />
-          <InfoBox title="Recovered" cases={4000} total={43000} />
-          <InfoBox title="Deaths" cases={980} total={2903} />
+          <InfoBox
+            title="Coronavirus Cases"
+            cases={countryInfo.todayCases}
+            total={countryInfo.cases}
+          />
+          <InfoBox
+            title="Recovered"
+            cases={countryInfo.todayRecovered}
+            total={countryInfo.recovered}
+          />
+          <InfoBox
+            title="Deaths"
+            cases={countryInfo.todayDeaths}
+            total={countryInfo.deaths}
+          />
         </div>
 
         <Map />
