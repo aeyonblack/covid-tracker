@@ -2,9 +2,18 @@
   margin: 0;
 }
 
-.app__header {
+body {
+  background-color: #f5f6fa;
+}
+
+.app-header {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  justify-content: space-between;
+}
+
+.app-stats {
+  display: flex;
   justify-content: space-between;
 }
