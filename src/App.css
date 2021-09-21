@@ -16,11 +16,23 @@ body {
   flex: 0.9;
 }
 
+#graph-header {
+  margin: 20px 0px;
+}
+
 .app-header {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
   justify-content: space-between;
+}
+
+.app-dropdown {
+  background-color: white;
+}
+
+.app-header h1 {
+  color: #888;
 }
 
 .app-stats {
