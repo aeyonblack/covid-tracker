@@ -1,41 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
+import { options } from './options';
 
-const covid_history =
-  'https://disease.sh/v3/covid-19/historical/all?lastdays=2';
-
-// format the covid history data to support chartjs integration
-const buildChartData = (data, casesType = 'cases') => {
-  const chartData = [];
+const buildChartData = (data, casesType) => {
+  let chartData = [];
   let lastDataPoint;
-  data[casesType].forEach((date) => {
+  for (let date in data.cases) {
     if (lastDataPoint) {
-      const newDataPoint = {
+      let newDataPoint = {
         x: date,
         y: data[casesType][date] - lastDataPoint,
       };
       chartData.push(newDataPoint);
     }
     lastDataPoint = data[casesType][date];
-  });
+  }
   return chartData;
 };
 
-function LineGraph() {
+function LineGraph({ casesType = 'cases' }) {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    fetch(covid_history)
-      .then((response) => response.json())
-      .then((data) => {
-        const chartData = buildChartData(data);
-        setData(chartData);
-      }, []);
-  });
+    const fetchData = async () => {
+      await fetch('https://disease.sh/v3/covid-19/historical/all?lastdays=120')
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          let chartData = buildChartData(data, casesType);
+          setData(chartData);
+          console.log(chartData);
+        });
+    };
+
+    fetchData();
+  }, [casesType]);
 
   return (
     <div>
-      <h2>Graph comes here</h2>
+      {data?.length > 0 && (
+        <Line
+          data={{
+            datasets: [
+              {
+                backgroundColor: 'rgba(204, 16, 52, 0.5)',
+                borderColor: '#CC1034',
+                data: data,
+              },
+            ],
+          }}
+          options={options}
+        />
+      )}
     </div>
   );
 }

@@ -68,8 +68,6 @@ function App() {
       });
   };
 
-  console.log('info ', countryInfo);
-
   return (
     <div className="app">
       <div className="app-left">
