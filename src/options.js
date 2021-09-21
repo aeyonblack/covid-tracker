@@ -1,4 +1,5 @@
 import numeral from 'numeral';
+
 export const options = {
   legend: {
     display: false,
